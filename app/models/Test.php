@@ -7,4 +7,13 @@ class Test
         'Name',
         'Age',
     ];
+
+    public function validate($data)
+    {
+        if(empty($data['Name']) || empty($data['Age']))
+        {
+            return false;
+        }
+        return true;
+    }
 }
