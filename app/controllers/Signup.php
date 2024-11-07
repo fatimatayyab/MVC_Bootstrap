@@ -6,13 +6,13 @@ use Controller;
       $data=[];
        if($_SERVER['REQUEST_METHOD']=='POST')
        {
-        $test=new Test;
-        if($test->validate($_POST))
+        $user=new User;
+        if($user->validate($_POST))
         {  
-             $test->insert($_POST);
+             $user->insert($_POST);
              redirect('login');
                 } 
-        $data['errors'] =$test->errors; 
+        $data['errors'] =$user->errors; 
 
        }
 $this->view('signup', $data); 

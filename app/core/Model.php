@@ -6,7 +6,7 @@ Trait Model {
     
     protected $limit        =   10;    
     protected $offset       =   0;
-    protected $order_type   =   'desc';
+    protected $order_type   =   'asc';
     protected $order_column =   'id';
     public $errors       =   [];
   
@@ -57,21 +57,32 @@ Trait Model {
          return $this->query($query, $data);
    
     }
-    public function insert($data){
-        if(!empty($this->allowedColumns))
-        foreach($data as $key=>$value){
-            if(!in_array($key, $this->allowedColumns)){
-                unset($data[$key]);
-          
+    public function insert($data) {
+        if(!empty($this->allowedColumns)) {
+            foreach($data as $key => $value) {
+                if(!in_array($key, $this->allowedColumns)) {
+                    unset($data[$key]);
+                }
             }
         }
-        $keys=array_keys($data);
-        $query= "insert into $this->table (" .implode(",",$keys) . ") values (:".implode(",:",$keys).")";
         
-        $this->query($query, $data);
-        return false;
+        // Debug: Check the data being inserted
+        error_log(print_r($data, true));
+    
+        // Hash the password before inserting
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        
+        $keys = array_keys($data);
+        $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(", :", $keys) . ")";
+        
+        // Execute query and check if it succeeded
+        if ($this->query($query, $data)) {
+            return true;
+        }
+        
+        return false;  // Log failure here if needed
     }
-    public function update($id, $data, $id_column='id')
+        public function update($id, $data, $id_column='id')
     {  
         if(!empty($this->allowedColumns))
         foreach($data as $key=>$value){
@@ -89,7 +100,7 @@ Trait Model {
         $data [$id_column]=$id;
 
         $this->query($query, $data);
-         return false;
+        return true; 
 
 
     }

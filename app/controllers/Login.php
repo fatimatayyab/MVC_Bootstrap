@@ -6,9 +6,9 @@ use Controller;
         $data= [];
         if($_SERVER['REQUEST_METHOD']=='POST')
         { 
-            $test=new Test;      
+            $user=new User;      
             $arr['email']=$_POST['email'];
-           $row= $test->first($arr);
+           $row= $user->first($arr);
            if($row){
             if($row->password === $_POST['password'])
             {
@@ -17,8 +17,8 @@ use Controller;
             }
             
            }
-        $test->errors['email']="Email or password is incorrect";
-        $data['errors'] =$test->errors; 
+        $user->errors['email']="Email or password is incorrect";
+        $data['errors'] =$user->errors; 
         }
 
     $this->view('login', $data);     

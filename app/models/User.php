@@ -1,12 +1,12 @@
 <?php
-class Test
+class User
 {
     use Model;
-    protected $table='test';
-    protected $allowedColumns=[
-        'email',
-        'password',
-    ];
+    protected $table='user';
+    protected $allowedColumns = [
+      'email', 'password', 'firstname', 'lastname', 'username',
+      'address', 'nationality', 'nic', 'gender',  // Add 'city' here if needed
+  ];
 
     public function validate($data)
     {
@@ -28,7 +28,7 @@ class Test
       $this->errors['terms']="Please accept the terms and conditions";
     }
         
-
+    error_log(print_r($this->errors, true));
       if(empty($this->errors))
       {
         return true;
