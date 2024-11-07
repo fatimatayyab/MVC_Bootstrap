@@ -155,6 +155,11 @@
     
 <main class="form-signin w-100 m-auto">
   <form method="post">
+    <?php if(!empty($errors)): ?>
+    <div class="alert alert-danger">
+      <?= implode("<br>",$errors); ?>
+    </div>
+    <?php endif; ?>
   
     <h1 class="h3 mb-3 fw-normal">Create Account</h1>
 

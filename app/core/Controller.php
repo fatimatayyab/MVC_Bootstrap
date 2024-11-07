@@ -1,7 +1,10 @@
 <?php
 
 Trait Controller{
-    public function view($name){
+    public function view($name, $data=[]){
+
+        if(!empty($data))
+        extract($data);
         $filename = "../app/views/".$name.".view.php";  // Use the first part of URL to determine the controller
         
         // Check if the controller file exists

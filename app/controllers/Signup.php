@@ -2,15 +2,20 @@
 class Signup  {
 use Controller;
     public function index() {
-    
+      
+      $data=[];
+       if($_SERVER['REQUEST_METHOD']=='POST')
+       {
         $test=new Test;
-        if($test->validate($_POST)){    $test->insert($_POST);} 
-        $test->insert($_POST);
-        redirect('home');
+        if($test->validate($_POST))
+        {  
+             $test->insert($_POST);
+             redirect('login');
+                } 
+        $data['errors'] =$test->errors; 
 
-
-show($_POST);
-$this->view('signup'); 
+       }
+$this->view('signup', $data); 
 }
 
 }
