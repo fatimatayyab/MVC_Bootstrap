@@ -104,12 +104,12 @@ Trait Model {
 
 
     }
-    public function delete($id, $id_column='id'){
+    public function delete($id, $id_column='ID'){
         $data[$id_column]=$id;
      
         $query= "delete from $this->table where $id_column = :$id_column";
 
-        $this->query($query, $data);
+        return $this->query($query, $data);
     }
    
 

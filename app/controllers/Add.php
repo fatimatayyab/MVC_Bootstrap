@@ -13,7 +13,7 @@ class Add {
                 'email' => $_POST['email'],
                 'password' => $_POST['password'],
                 'gender' => $_POST['gender'],
-                'city' => $_POST['city'],
+           
                 'nationality' => $_POST['nationality'],
                 'nic' => $_POST['nic'],
                 'address' => $_POST['address']
