@@ -20,33 +20,40 @@ class Update {
                         'firstname' => $_POST['firstname'],
                         'lastname' => $_POST['lastname'],
                         'username' => $_POST['username'],
+                        'password' => $_POST['password'],
                         'email' => $_POST['email'],
-                        'gender' => $_POST['gender'],
-                        'city' => $_POST['city'],
+                        'gender' => $_POST['gender'],                   
                         'nationality' => $_POST['nationality'],
                         'nic' => $_POST['nic'],
                         'address' => $_POST['address']
-                    ];
-                    $changes = array_diff_assoc($updatedData, $userData);
-                    if (!empty($changes)) {
-                        // Update only the changed fields
-                        $userModel->update($userId, $changes);
-                        $_SESSION['message'] = 'User information updated successfully';
+                    ]; 
+                    if ($userModel->validate($updatedData,true, $userId)) {
+                        $changes = array_diff_assoc($updatedData, $userData);
+                        if (!empty($changes)) {
+                            // Update only the changed fields
+                            $userModel->update($userId, $changes);
+                            $_SESSION['message'] = 'User information updated successfully';
+                        } else {
+                            $_SESSION['message'] = 'No changes made to update';
+                        }
+                        redirect('read');
                     } else {
-                        $_SESSION['message'] = 'No changes made to update';
+                        // Pass errors and form data to the view if validation fails
+                        $data['errors'] = $userModel->errors;
+                        $data['user'] = array_merge($userData, $updatedData); // Keep form filled with entered data
+                        $this->view('add', $data);
+                        return;
                     }
-                    redirect('read');
+                } else {
+                    
+                    $data['user'] = $userData;
+                    $this->view('add', $data);
                 }
-                $data['user'] = $userData; // Pass user data to the view
             } else {
-                $_SESSION['message'] = 'User not found';
-                redirect('read');
-            }
-        } else {
             $_SESSION['message'] = 'No user ID specified';
             redirect('read');
         }
 
-        $this->view('add', $data);
+   
     }
-}
+} }

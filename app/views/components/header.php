@@ -17,8 +17,8 @@
             
             <!-- Buttons Container -->
             <div class="px-4">
-                <a href="<?=ROOT?>/read" class="btn btn-light me-2">View All Users</a>
-                <a href="<?=ROOT?>/add" class="btn btn-light">Add New User</a>
+                <a href="<?=ROOT?>/read" class="btn btn-light me-2">View All Customers</a>
+                <a href="<?=ROOT?>/add" class="btn btn-light">Add New Customer</a>
             </div>
         </header>
     </div>

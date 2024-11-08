@@ -4,8 +4,15 @@
     padding:0;
 
 }
-body {
-  
+.is-invalid {
+  border-color: red !important;
+}
+
+/* For the error messages */
+.invalid-feedback {
+  color: red;
+  font-size: 0.875em;
+  font-weight: bold; 
 }
 
 form{
@@ -22,10 +29,18 @@ table {
     width: 100%; /* Ensure table fills container */
     border-collapse: collapse; /* Remove table borders */
   }
+
+  .table td {
+    /* Other styles */
+    max-width: 250px; /* Adjust the maximum width as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
   
   th, td {
     padding: 0.75rem; /* Consistent padding for cells */
-    border: 1px solid #dee2e6; /* Light border for readability */
+    border: 1px solid #dee2e6;
+    white-space: nowrap; /* Light border for readability */
   }
   
   /* Headings */
@@ -48,9 +63,28 @@ table {
   .btn-danger {
     padding: 0.25rem 0.5rem; /* Adjust button size as needed */
     font-size: 0.875rem; /* Smaller font for compact buttons */
+    border-radius: 5px;
+    padding: 12px;
+    min-width: 120px; 
   }
   
   /* Button spacing adjustments (optional) */
   .btn-group {
     margin: 0; /* Remove default margin for tighter spacing */
+  } 
+  .form-select, .form-control {
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+ 
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
   }

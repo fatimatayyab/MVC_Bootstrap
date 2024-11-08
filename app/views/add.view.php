@@ -8,7 +8,7 @@
 <div class="col-md-4">
     <label for="validationCustom01" class="form-label">First name</label>
     <input type="text" class="form-control" id="validationCustom01" name="firstname" value="<?= isset($user['firstname']) ? $user['firstname'] : '' ?>" placeholder="First Name" required>
-    <div class="valid-feedback">Looks good!</div>
+   
 </div>
 <div class="col-md-4">
     <label for="validationCustom02" class="form-label">Last name</label>
@@ -17,18 +17,26 @@
 </div>
 <div class="col-md-4">
     <label for="validationCustomUsername" class="form-label">Username</label>
-    <input type="text" class="form-control" id="validationCustomUsername" name="username" value="<?= isset($user['username']) ? $user['username'] : '' ?>" placeholder="User Name" <?= isset($user['username']) ? 'readonly' : '' ?> required>
-    <div class="invalid-feedback">Please choose a username.</div>
+    <input type="text" class="form-control <?= isset($data['errors']['username']) ? 'is-invalid' : '' ?>" id="validationCustomUsername" name="username" value="<?= isset($user['username']) ? $user['username'] : '' ?>" placeholder="User Name" <?= isset($user['username']) ? 'readonly' : '' ?> required>
+    <?php if (isset($data['errors']['username'])): ?>
+        <div class="invalid-feedback"><?= $data['errors']['username']; ?></div>
+    <?php endif; ?>
 </div>
+
 <!-- Second row: Email and Password -->
 <div class="col-md-6">
     <label for="inputEmail4" class="form-label">Email</label>
-    <input type="email" class="form-control" id="inputEmail4" name="email" value="<?= isset($user['email']) ? $user['email'] : '' ?>" placeholder="example@example.com" <?= isset($user['email']) ? 'readonly' : '' ?> required>
+    <input type="email" class="form-control <?= isset($data['errors']['email']) ? 'is-invalid' : '' ?>" id="inputEmail4" name="email" value="<?= isset($user['email']) ? $user['email'] : '' ?>" placeholder="example@example.com" <?= isset($user['email']) ? 'readonly' : '' ?> required>
+    <?php if (isset($data['errors']['email'])): ?>
+        <div class="invalid-feedback"><?= $data['errors']['email']; ?></div>
+    <?php endif; ?>
 </div>
 <div class="col-md-6">
     <label for="inputPassword4" class="form-label">Password</label>
     <input type="password" class="form-control" id="inputPassword4" name="password" value="<?= isset($user['password']) ? $user['password'] : '' ?>" placeholder="Password" required>
-</div>
+    <?php if (isset($data['errors']['password'])): ?>
+        <p class="error"><?= $data['errors']['password']; ?></p>
+    <?php endif; ?></div>
 
             <!-- Third row: Gender, Nationality, NIC -->
             <div class="col-md-4">
@@ -42,11 +50,13 @@
             <div class="col-md-4">
                 <label for="inputNationality" class="form-label">Nationality</label>
                 <input type="text" class="form-control" id="inputNationality" name="nationality" value="<?= isset($user['nationality']) ? $user['nationality'] : '' ?>" placeholder="Nationality" required>
-            </div>
+                 </div>
             <div class="col-md-4">
                 <label for="inputNIC" class="form-label">NIC #</label>
-                <input type="text" class="form-control" id="inputNIC" name="nic" value="<?= isset($user['nic']) ? $user['nic'] : '' ?>" placeholder="National Identity Card Number" required>
-            </div>
+                <input type="text" class="form-control <?= isset($data['errors']['nic']) ? 'is-invalid' : '' ?>" id="inputNIC" name="nic" value="<?= isset($user['nic']) ? $user['nic'] : '' ?>" placeholder="National Identity Card Number" required>
+           <?php if (isset($data['errors']['nic'])): ?>
+            <div class="invalid-feedback"><?= $data['errors']['nic']; ?></div>
+    <?php endif; ?> </div>
 
             <!-- Fourth row: Address -->
             <div class="col-12">
@@ -54,15 +64,9 @@
                 <input type="text" class="form-control" id="inputAddress" name="address" value="<?= isset($user['address']) ? $user['address'] : '' ?>" placeholder="1234 Main St" required>
             </div>
 
-            <!-- Checkbox and Submit button -->
-            <div class="col-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck" name="terms">
-                    <label class="form-check-label" for="gridCheck">
-                        Check me out
-                    </label>
-                </div>
-            </div>
+            
+          
+
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">
                     <?= isset($user) ? 'Update' : 'Add' ?>
