@@ -4,73 +4,61 @@ class UpdateOrder {
     use Controller;
 
     public function index() {
+        echo "UpdateOrder controller called";
         $data = [];
         
         // Check if an ID is provided in the URL (e.g., /updateOrder?ID=5)
-        if (isset($_GET['ID'])) {
-            $orderModel = new Order();
-            $orderId = $_GET['ID'];
+        if (isset($_GET['order_id']) && isset($_GET['customer_id'])) {
+            $userOrder = new UserOrder;
+            $orderId = $_GET['order_id'];
+            $customerId =$_GET['customer_id'] ;
             
             // Fetch order data by ID
-            $orderData = $orderModel->first(['ID' => $orderId]);
+            $orderData = $userOrder->first(['order_id' => $orderId]);
 
             if ($orderData) {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    // Get updated data from POST request
-                    $updatedData = [
-                        'customer_id'  => $_POST['customer_id'],  // Assuming customer_id is provided and not editable by the user
-                        'order_date'   => $_POST['order_date'],
+                    echo "POST method called";
+                   
+                    $updatedData = [                     
+                    
                         'status'       => $_POST['status'],
-                        'total_amount' => $_POST['total_amount']
+                        'price' => $_POST['price'],
+                        'quantity' => $_POST['quantity'],
+                        'product' => $_POST['product'],
                     ]; 
-
-                    // Optionally, add validation here if needed
-                    if ($this->validateOrderData($updatedData)) {
-                        // Compare new data with old data
+echo "updated data is updated";
+                 
+                    if ($userOrder->validate($updatedData)) {
+                        echo "validation is done";
                         $changes = array_diff_assoc($updatedData, $orderData);
+                
                         if (!empty($changes)) {
+                            echo "changes occured";
                             // Update only the changed fields
-                            $orderModel->update($orderId, $changes);
+                            $userOrder->update($orderId, $changes, 'order_id');
                             $_SESSION['message'] = 'Order updated successfully';
-                        } else {
-                            $_SESSION['message'] = 'No changes made to update';
                         }
-                        redirect('orders/read'); // Redirect to the orders page after successful update
+                        else {
+                        $_SESSION['message'] = 'No changes made to update';
+                        }
+                        redirect("readorder/?ID={$customerId}");
                     } else {
-                        // Pass errors and form data to the view if validation fails
-                        $data['errors'] = 'Please fill all fields correctly';
-                        $data['order'] = array_merge($orderData, $updatedData); // Keep form filled with entered data
-                        $this->view('orders/edit', $data);
+                      
+                        $data['errors'] = $userOrder->errors;
+                        $data['user_order'] = array_merge($orderData, $updatedData); 
+                        $this->view('addorder', $data);
                         return;
                     }
                 } else {
-                    // If it's a GET request, pre-fill the form with existing order data
-                    $data['order'] = $orderData;
-                    $this->view('orders/edit', $data);  // Render the edit order view with existing data
+                    
+                    $data['user_order'] = $orderData;
+                    $this->view('addorder', $data);  
                 }
             } else {
                 $_SESSION['message'] = 'No order ID specified';
-                redirect('orders/read');  // Redirect if no order found
+                redirect('readorder/?ID={$customer_id}');  
             }
         }
-    }
-
-    // Validation for order data (this can be expanded based on your requirements)
-    private function validateOrderData($data) {
-        $errors = [];
-
-        if (empty($data['customer_id'])) {
-            $errors['customer_id'] = 'Customer ID is required';
-        }
-
-        if (empty($data['order_date'])) {
-            $errors['order_date'] = 'Order date is required';
-        }
-
-        if (empty($data['total_amount']) || !is_numeric($data['total_amount'])) {
-            $errors['total_amount'] = 'Valid total amount is required';
-        }
-
-        return empty($errors); // Return true if no errors, false otherwise
     }
 }

@@ -9,7 +9,7 @@
   }
   ?>
 
-  <section class="container my-5 w-75">
+  <section class="container my-5 w-85 mx-5  ">
   <!-- Filter Form -->
 <form method="get"  action="<?=ROOT?>/filter"class="mb-4 mx-auto" style="max-width: 1200px;">
   <div class="row mb-3 align-items-end">
@@ -17,7 +17,7 @@
     <div class="col-md-2">
       <label for="filterBy" class="form-label">Filter users by:</label>
       <select name="filterBy" id="filterBy" class="form-select">
-        <option value="ID" <?= isset($_GET['filterBy']) && $_GET['filterBy'] == 'ID' ? 'selected' : ''; ?>>ID</option>
+        
         <option value="email" <?= isset($_GET['filterBy']) && $_GET['filterBy'] == 'email' ? 'selected' : ''; ?>>Email</option>
         <option value="firstname" <?= isset($_GET['filterBy']) && $_GET['filterBy'] == 'firstname' ? 'selected' : ''; ?>>First Name</option>
         <option value="lastname" <?= isset($_GET['filterBy']) && $_GET['filterBy'] == 'lastname' ? 'selected' : ''; ?>>Last Name</option>
@@ -50,11 +50,12 @@
         No users exist.
       </div>
     <?php else: ?>
+      <div class="table-wrapper">
       <!-- Table displaying users -->
-      <table class="table table-striped table-hover text-center mx-auto">
+      <table class="table table-striped table-hover text-center mx-4">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">Customer ID</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Username</th>
@@ -63,7 +64,8 @@
             <th scope="col">Nationality</th>
             <th scope="col">NIC</th>
             <th scope="col">Gender</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Total Orders</th>
+      <th scope="col" colspan="2" class="mx=4">Actions</th> 
           </tr>
         </thead>
         <tbody>
@@ -78,17 +80,28 @@
             <td><?= $user['nationality'] ?></td>
             <td><?= $user['nic'] ?></td>
             <td><?= $user['gender'] ?></td>
+            <td><?= $user['totalorders'] ?></td>
             <td>
-            <div class="d-flex justify-content-center">
-              <a class="btn btn-danger  d-inline m-2" href="<?=ROOT?>/delete?ID=<?= $user['ID'] ?>">Delete</a>
-              <a class="btn btn-secondary  d-inline m-2" href="<?=ROOT?>/update?ID=<?= $user['ID'] ?>">Edit</a>
-              <a class="btn btn-primary  d-inline m-2" href="<?=ROOT?>/readorder?ID=<?= $user['ID'] ?>">View Orders</a>
-              </div>
-            </td>
+  <!-- Action Buttons in two columns -->
+  <div class="d-flex  justify-content-center mx-1 px-4 w-100 ">
+    <div class="d-flex flex-column mx-4 ">
+      <!-- First column of buttons (Delete and Edit) -->
+      <a class="btn btn-danger mb-2" href="<?=ROOT?>/delete?ID=<?= $user['ID'] ?>">Delete</a>
+      <a class="btn btn-secondary mb-2" href="<?=ROOT?>/update?ID=<?= $user['ID'] ?>">Edit</a>
+    </div>
+
+    <div class="d-flex flex-column ">
+      <!-- Second column of buttons (View Orders and New Order) -->
+      <a class="btn btn-primary mb-2" href="<?=ROOT?>/readorder?ID=<?= $user['ID'] ?>">View Orders</a>
+      <a class="btn btn-primary mb-2" href="<?=ROOT?>/addorder?ID=<?= $user['ID'] ?>">New Order</a>
+    </div>
+  </div>
+</td>
           </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
+      </div>
     <?php endif; ?>
   </section>
 </body>

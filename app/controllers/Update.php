@@ -16,6 +16,7 @@ class Update {
             
             if ($userData) {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    
                     $updatedData = [
                         'firstname' => $_POST['firstname'],
                         'lastname' => $_POST['lastname'],

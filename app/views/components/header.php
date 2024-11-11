@@ -17,6 +17,7 @@
             
             <!-- Buttons Container -->
             <div class="px-4">
+            <a href="<?=ROOT?>/orderwithuserinfo" class="btn btn-light me-2">View Orders with User Info</a>
                 <a href="<?=ROOT?>/read" class="btn btn-light me-2">View All Customers</a>
                 <a href="<?=ROOT?>/add" class="btn btn-light">Add New Customer</a>
             </div>

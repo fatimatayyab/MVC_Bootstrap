@@ -3,56 +3,51 @@ class AddOrder {
     use Controller;
 
     public function index() {
-        // Check if form is submitted
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get the POST data
-            $data = [
-                'customer_id'  => $_POST['customer_id'],  // Assuming customer ID is passed from a logged-in user
-                'order_date'   => $_POST['order_date'],
-                'status'       => $_POST['status'],
-                'total_amount' => $_POST['total_amount']
-            ];
-            
-            $orderModel = new Order;
+        
 
-            // Optionally, add validation (for example, checking if total_amount is a valid number)
-            if ($this->validateOrderData($data)) {
-                // If validation passes, insert the order data
-                if ($orderModel->insert($data)) {
-                    $_SESSION['message'] = 'Order added successfully!';
-                    redirect('readorder'); // Redirect to the orders page after successful insert
-                } else {
-                    $_SESSION['error'] = 'Error adding order!';
-                }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            echo 'Customer ID: ' . $_POST['customer_id'];
+       
+            $data = [
+                'customer_id' => $_POST['customer_id'],
+                'product' => $_POST['product'],
+                'quantity' => $_POST['quantity'],
+                'price' => $_POST['price'],
+                'status' => $_POST['status'],
+                'order_date' => date('Y-m-d H:i:s'), 
+            ];
+            echo '<pre>';
+            print_r($data);
+            echo '</pre>';
+            $user = new User;  // Assuming you have a User model or object
+            $existingUser = $user->findAll($data['customer_id']);  // Find user by customer_id
+
+            if (!$existingUser) {
+                echo 'No user found with customer_id: ' . $data['customer_id'];
             } else {
-                // If validation fails, pass the errors to the view
-                $data['errors'] = 'Please fill all fields correctly.';
+                echo 'User exists: ' . $existingUser['firstname'] . ' ' . $existingUser['lastname'];
             }
 
-            // Show the form with errors or success message
-            $this->view('addorder', $data);
-        } else {
-            // If no form is submitted, load the form page
+            
+
+            $userOrder = new UserOrder;
+
+            if ($userOrder->validate($data)) {
+                $userOrder->insert($data);
+                $_SESSION['message'] = 'Order added successfully!';       
+                $customer_id = $_POST['customer_id'];  // Get the customer ID from the form
+                redirect("readorder/?ID={$customer_id}");
+            } else {              
+                $data['error'] = "Failed to add order.";
+                $this->view('addorder', $data); 
+            }
+            $this->view('addorder', $data); 
+        }
+
+        else {
+
             $this->view('addorder');
         }
-    }
-
-    // Validation for order data (can be expanded)
-    private function validateOrderData($data) {
-        $errors = [];
-
-        if (empty($data['customer_id'])) {
-            $errors['customer_id'] = 'Customer ID is required';
-        }
-
-        if (empty($data['order_date'])) {
-            $errors['order_date'] = 'Order date is required';
-        }
-
-        if (empty($data['total_amount']) || !is_numeric($data['total_amount'])) {
-            $errors['total_amount'] = 'Valid total amount is required';
-        }
-
-        return empty($errors); // Return true if no errors, false otherwise
     }
 }

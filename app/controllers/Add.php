@@ -17,22 +17,23 @@ class Add {
                 'nationality' => $_POST['nationality'],
                 'nic' => $_POST['nic'],
                 'address' => $_POST['address']
+                
             ];
             $userModel = new User;
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-            if ($userModel->validate($data)) {
-                // If validation passes, insert the user data
+            if ($userModel->validate($data)) {        
                 $userModel->insert($data);
                 $_SESSION['message'] = 'User added successfully!';
-                redirect('read'); // Redirect to a page after successful insert
+                redirect('read');
             } else {
-                // If validation fails, pass the errors to the view
+          
                 $data['errors'] = $userModel->errors;
   
             }
-            $this->view('add', $data); // Show the form with errors
+            $this->view('add', $data); 
         } else {
-            // If no form is submitted, load the form page
+
             $this->view('add');
         }
     }

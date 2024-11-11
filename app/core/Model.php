@@ -39,6 +39,58 @@ Trait Model {
     
          return $this->query($query);
    
+    } public function count($table, $condition = [], $conditionNot = []) {
+        // Prepare the base query
+        $query = "SELECT COUNT(*) AS total FROM $table WHERE ";
+
+        // Add conditions for the "WHERE" clause
+        $keys = array_keys($condition);
+        foreach ($keys as $key) {
+            $query .= "$key = :$key AND ";
+        }
+        
+        // Add conditions for the "NOT WHERE" clause
+        $keysNot = array_keys($conditionNot);
+        foreach ($keysNot as $key) {
+            $query .= "$key != :$key AND ";
+        }
+
+        // Remove trailing "AND"
+        $query = rtrim($query, " AND ");
+
+        // Execute the query
+        $result = $this->query($query, array_merge($condition, $conditionNot));
+
+        // Return the count result
+        return $result ? $result[0]['total'] : 0;
+    }
+    public function join($joinTable, $joinCondition, $type = 'INNER JOIN', $columns = '*', $additionalWhere = []) {
+        // Ensure the columns are not empty or default to '*'
+        if (empty($columns)) {
+            $columns = '*';
+        }
+
+        // Base SQL query
+        $query = "SELECT $columns FROM $this->table $type $joinTable ON $joinCondition";
+
+        // Add additional WHERE conditions if provided
+        if (!empty($additionalWhere)) {
+            $keys = array_keys($additionalWhere);
+            $query .= ' WHERE ';
+            foreach ($keys as $key) {
+                $query .= "$key = :$key AND ";
+            }
+            $query = rtrim($query, " AND ");
+        }
+
+        // Add the LIMIT and OFFSET if specified
+        $query .= " LIMIT $this->limit OFFSET $this->offset";
+
+        // Merge the additional WHERE conditions with the query parameters
+        $data = $additionalWhere;
+
+        // Execute the query and return the result
+        return $this->query($query, $data);
     }
     public function where($data, $data_not=[]){
         $keys=array_keys($data);
@@ -69,8 +121,6 @@ Trait Model {
         // Debug: Check the data being inserted
         error_log(print_r($data, true));
     
-        // Hash the password before inserting
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         
         $keys = array_keys($data);
         $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(", :", $keys) . ")";

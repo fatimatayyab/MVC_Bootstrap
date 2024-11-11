@@ -5,8 +5,12 @@ class User
     protected $table='user';
     protected $allowedColumns = [
       'email', 'password', 'firstname', 'lastname', 'username',
-      'address', 'nationality', 'nic', 'gender',  
+      'address', 'nationality', 'nic', 'gender',  'totalorders'
   ];
+  public function countOrders($userId) {
+    // Use the general count method from the Model trait
+    return $this->count('user_order', ['customer_id' => $userId]);
+}
 public function validate($data, $isUpdate = false, $userId = null)
   {
       $this->errors = []; // Clear any previous errors
