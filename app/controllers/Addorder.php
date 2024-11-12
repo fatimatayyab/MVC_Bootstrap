@@ -17,17 +17,11 @@ class AddOrder {
                 'status' => $_POST['status'],
                 'order_date' => date('Y-m-d H:i:s'), 
             ];
-            echo '<pre>';
-            print_r($data);
-            echo '</pre>';
-            $user = new User;  // Assuming you have a User model or object
-            $existingUser = $user->findAll($data['customer_id']);  // Find user by customer_id
+           
+             // Assuming you have a User model or object
+            // Find user by customer_id
 
-            if (!$existingUser) {
-                echo 'No user found with customer_id: ' . $data['customer_id'];
-            } else {
-                echo 'User exists: ' . $existingUser['firstname'] . ' ' . $existingUser['lastname'];
-            }
+            
 
             
 

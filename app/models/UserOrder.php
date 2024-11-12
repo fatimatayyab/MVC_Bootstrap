@@ -6,10 +6,13 @@ class UserOrder
 
     protected $table = 'user_order';
     protected $allowedColumns = [
-       'status', 'price', 'quantity', 'product' ,
+       'order_date', 'status', 'price', 'quantity', 'product' ,'customer_id'
     ];
 
-
+    public function countOrdersByUser($userId)
+    {
+        return $this->count(['customer_id' => $userId]);
+    }
   
     // Method to validate order data
     public function validate($data)
@@ -32,8 +35,8 @@ class UserOrder
         elseif (!is_numeric($data['quantity']) || $data['quantity'] < 0) {
             $this->errors['quantity'] = "Quantity must be a positive number";
         }
-        if (empty($data['quantity'])) {
-            $this->errors['quantity'] = "Quantity of Product is required";
+        if (empty($data['price'])) {
+            $this->errors['price'] = "Price  of Product is required";
         } 
         elseif (!is_numeric($data['price']) || $data['price'] < 0) {
             $this->errors['price'] = "price must be a positive number";
@@ -41,5 +44,6 @@ class UserOrder
 
         return empty($this->errors); 
     }
+    
     
 }

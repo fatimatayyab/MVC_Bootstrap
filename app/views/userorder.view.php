@@ -43,7 +43,7 @@
 
         <h2 class="text-center mb-4">Orders</h2>
 
-        <?php if (empty($data['user_order'])): ?>
+        <?php if (empty($data['userOrders'])): ?>
 
             <div class="alert alert-warning text-center">
                 No orders found.
@@ -62,7 +62,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($data['user_order'] as $userorder): ?>
+                <?php foreach ($data['userOrders'] as $userorder): ?>
                         <tr>
                             <th scope="row"><?= $userorder['customer_id'] ?></th>
                             <td><?=$userorder['order_id'] ?></td>

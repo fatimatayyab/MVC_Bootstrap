@@ -5,7 +5,7 @@ class User
     protected $table='user';
     protected $allowedColumns = [
       'email', 'password', 'firstname', 'lastname', 'username',
-      'address', 'nationality', 'nic', 'gender',  'totalorders'
+      'address', 'nationality', 'nic', 'gender', 
   ];
   public function countOrders($userId) {
     // Use the general count method from the Model trait

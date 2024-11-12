@@ -18,7 +18,7 @@
             </div>
         <?php endif; ?>
 
-        <form method="post" >
+        <form method="post"  >
             <div class="mb-3">
                 <label for="customer_id" class="form-label">Customer ID</label>
                 <!-- Customer ID input field, set to auto-fill and non-editable -->

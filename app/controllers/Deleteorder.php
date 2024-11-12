@@ -7,8 +7,8 @@ class DeleteOrder {
             $id = $_GET['order_id'];
             $customer_id = $_GET['customer_id']; 
             $userOrder = new UserOrder;
-
-           
+            
+          
             $userOrder->delete($id, 'order_id'); 
             $_SESSION['message']= "Order deleted successfully!";
           

@@ -39,32 +39,27 @@ Trait Model {
     
          return $this->query($query);
    
-    } public function count($table, $condition = [], $conditionNot = []) {
-        // Prepare the base query
-        $query = "SELECT COUNT(*) AS total FROM $table WHERE ";
-
-        // Add conditions for the "WHERE" clause
-        $keys = array_keys($condition);
-        foreach ($keys as $key) {
-            $query .= "$key = :$key AND ";
-        }
-        
-        // Add conditions for the "NOT WHERE" clause
-        $keysNot = array_keys($conditionNot);
-        foreach ($keysNot as $key) {
-            $query .= "$key != :$key AND ";
-        }
-
-        // Remove trailing "AND"
-        $query = rtrim($query, " AND ");
-
-        // Execute the query
-        $result = $this->query($query, array_merge($condition, $conditionNot));
-
-        // Return the count result
-        return $result ? $result[0]['total'] : 0;
     }
-    public function join($joinTable, $joinCondition, $type = 'INNER JOIN', $columns = '*', $additionalWhere = []) {
+    public function count($conditions = []) {
+        // Build the base SQL query for counting records
+        $sql = "SELECT COUNT(*) AS total FROM {$this->table}";
+        
+        // If conditions are provided, append a WHERE clause
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", array_map(function($key) {
+                return "$key = :$key";
+            }, array_keys($conditions)));
+        }
+    
+        // Execute the query and return the count
+        $result = $this->query($sql, $conditions);
+        
+        // Fetch the count from the result
+        if ($result) {
+            return $result[0]['total']; // Return the count (first row, first column)
+        }
+        return 0; // Return 0 if no result
+    }    public function join($joinTable, $joinCondition, $type = 'INNER JOIN', $columns = '*', $additionalWhere = []) {
         // Ensure the columns are not empty or default to '*'
         if (empty($columns)) {
             $columns = '*';
